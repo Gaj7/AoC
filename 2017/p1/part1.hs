@@ -6,9 +6,9 @@ inputList = map Data.Char.digitToInt input
 
 pairs = zip inputList (tail (cycle inputList))
 
-pairsSum :: [(Int, Int)] -> Int
-pairsSum = foldr maybeAdd 0
+sumEqPairs :: [(Int, Int)] -> Int
+sumEqPairs = foldr addIfEq 0
   where
-    maybeAdd a b = if (fst a == snd a) then (b + fst a) else b
+    addIfEq (a, a') b = if a == a' then a + b else b
 
-main = print $ pairsSum pairs
+main = print $ sumEqPairs pairs
