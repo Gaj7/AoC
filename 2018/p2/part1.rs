@@ -7,7 +7,7 @@ fn main() {
 
     // Reads until EOF
     io::stdin().read_to_string(&mut input);
-    
+
     let mut doubles = 0;
     let mut triples = 0;
     for line in input.lines() {
@@ -17,22 +17,9 @@ fn main() {
             *map.entry(c.to_string()).or_insert(0) += 1;
         }
         // Count doubles and triples
-        let mut found_double = false;
-        let mut found_triple = false;
-        for (_, v) in map.iter() {
-            let v = *v;
-            if !found_double && v == 2 {
-                doubles += 1;
-                found_double = true;
-            }
-            else if !found_triple && v == 3 {
-                triples += 1;
-                found_triple = true;
-            }
-        }
+        if map.iter().any(|(_, &v)| v == 2) {doubles += 1;}
+        if map.iter().any(|(_, &v)| v == 3) {triples += 1;}
     }
 
-    let checksum = doubles * triples;
-
-    println!("checksum: {}", checksum);
+    println!("checksum: {}", doubles*triples);
 }
