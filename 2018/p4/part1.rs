@@ -25,19 +25,19 @@ fn parse_line(s : &str) -> Option<TimedEvent> {
     let time_str  = iter.next()?;
     let event_str = iter.next()?;
 
-    let year  = match  (&date_str[1..4]).parse::<usize>() {Ok(n) => n, Err(e) => return None};
-    let month = match  (&date_str[6..7]).parse::<usize>() {Ok(n) => n, Err(e) => return None};
-    let day   = match (&date_str[9..10]).parse::<usize>() {Ok(n) => n, Err(e) => return None};
+    let year  = match  (&date_str[1..5]).parse::<usize>() {Ok(n) => n, Err(_) => return None};
+    let month = match  (&date_str[6..8]).parse::<usize>() {Ok(n) => n, Err(_) => return None};
+    let day   = match (&date_str[9..11]).parse::<usize>() {Ok(n) => n, Err(_) => return None};
 
-    let hour   = match (&time_str[0..1]).parse::<usize>() {Ok(n) => n, Err(e) => return None};
-    let second = match (&time_str[3..4]).parse::<usize>() {Ok(n) => n, Err(e) => return None};
+    let hour   = match (&time_str[0..2]).parse::<usize>() {Ok(n) => n, Err(_) => return None};
+    let second = match (&time_str[3..5]).parse::<usize>() {Ok(n) => n, Err(_) => return None};
 
     let event =
-        if (event_str == "wakes") {GuardEvent::WakeUp} else
-        if (event_str == "falls") {GuardEvent::FallAsleep} else
-        if (event_str == "Guard") {
+        if event_str == "wakes" {GuardEvent::WakeUp} else
+        if event_str == "falls" {GuardEvent::FallAsleep} else
+        if event_str == "Guard" {
             GuardEvent::BeginShift(
-                match &(iter.next()?)[1..].parse::<usize>() {Ok(n) => n, Err(e) => return None}
+                match (&(iter.next()?)[1..]).parse::<usize>() {Ok(n) => n, Err(_) => return None}
             )
         } else {return None};
 
@@ -55,7 +55,12 @@ fn main() {
     let mut input = String::new();
     io::stdin().read_to_string(&mut input);
 
-    let parsed_input : Vec<_> = input.lines().map(parse_line).collect();
+    // let parsed_input : Vec<_> = input.lines().map(parse_line).collect();
+    let parsed_input = input.lines().map(parse_line);
+
+    for event in parsed_input.map(|opt| opt.unwrap()) {
+        
+    }
 
     // print!("{}", input);
 }
